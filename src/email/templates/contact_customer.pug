@@ -1,0 +1,299 @@
+
+//- doctype html
+//- html(lang="en")
+//-   head
+//-     meta(charset="UTF-8")
+//-     meta(name="viewport", content="width=device-width, initial-scale=1.0")
+//-     title Thank You for Contacting Us – NetworkPCB
+//-     style.
+//-       body {
+//-         margin: 0;
+//-         padding: 0;
+//-         background-color: #f5f9f6;
+//-         font-family: Arial, sans-serif;
+//-       }
+//-       .container {
+//-         max-width: 600px;
+//-         margin: 30px auto;
+//-         background-color: #ffffff;
+//-         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+//-         font-size: 16px;
+//-         line-height: 1.6;
+//-         border-radius: 8px;
+//-         overflow: hidden;
+//-       }
+//-       .header {
+//-         background-color: #e9f5ee;
+//-         padding: 24px;
+//-         text-align: center;
+//-         border-bottom: 3px solid #1a6f37;
+//-       }
+//-       .header img {
+//-         max-width: 180px;
+//-       }
+//-       .content {
+//-         padding: 30px;
+//-         padding-bottom: 20px;
+//-       }
+//-       .content p, .details p {
+//-         color: #333;
+//-         margin-bottom: 14px;
+//-         text-align: left;
+//-       }
+//-       .details {
+//-         background-color: #f9fdfb;
+//-         padding: 20px;
+//-         border: 1px solid #e0eee8;
+//-         border-radius: 6px;
+//-         margin-top: 20px;
+//-         margin-bottom: 0;
+//-       }
+//-       .details p:last-child {
+//-         margin-bottom: 4px;
+//-       }
+//-       .footer {
+//-         text-align: left;
+//-         padding: 24px 30px 30px;
+//-         font-size: 14px;
+//-         color: #555;
+//-         background-color: #f0f5f1;
+//-         border-top: 1px solid #dce9e1;
+//-       }
+//-       .footer p {
+//-         margin: 6px 0;
+//-       }
+//-       .footer a {
+//-         color: #1a6f37;
+//-         text-decoration: none;
+//-       }
+//-       .footer .name {
+//-         font-weight: bold;
+//-         font-size: 16px;
+//-         color: #1a6f37;
+//-         margin-top: 10px;
+//-       }
+//-       .cta {
+//-         margin-top: 14px;
+//-       }
+//-       .cta a {
+//-         background-color: #1a6f37;
+//-         color: white;
+//-         padding: 12px 24px;
+//-         border-radius: 5px;
+//-         text-decoration: none;
+//-         font-weight: bold;
+//-         display: inline-block;
+//-       }
+//-       .cta a:hover {
+//-         background-color: #155c2d;
+//-       }
+
+//-   body
+//-     .container
+//-       .header
+//-         img(src="https://staging.networkpcb.com/_next/image?url=%2Fnpcb_logo.png&w=256&q=75" alt="NetworkPCB Logo")
+
+//-       .content
+//-         p Hi #{name},
+//-         p Thank you for reaching out to us. We’ve received your message and one of our team members will get back to you as soon as possible.
+//-         p Here is a copy of your request:
+
+//-         .details
+//-           p
+//-             strong Name:
+//-             |  #{name}
+//-           p
+//-             strong Email:
+//-             |  #{email}
+//-           p
+//-             strong Mobile:
+//-             |  #{mobile}
+//-           p
+//-             strong Company:
+//-             |  #{company}
+//-           p
+//-             strong Message:
+//-             |  #{message}
+//-           p
+//-             strong Submitted On:
+//-             |  #{createdAtPST}
+
+//-       .footer
+//-         p(style="margin: 0; font-size: 14.5px; color: #333;") We appreciate your interest and look forward to assisting you.
+//-         p(style="margin: 4px 0; font-size: 14.5px; color: #333;") If you did not make this submission, please ignore this email.
+//-         p(style="margin: 4px 0; font-size: 14.5px; color: #333;") &copy; 2025 NetworkPCB. All rights reserved.
+//-         p(style="margin: 20px 0 6px; font-size: 16px; color: #333;") Best regards,
+//-         p(style="font-weight: bold; margin: 0; font-size: 16px; color: #1a6f37;") Network PCB
+
+//-         p(style="margin: 0; color: #333;")
+//-           img(src="https://img.icons8.com/ios-filled/14/1a6f37/phone.png")
+//-           | &nbsp;+1 (408) 943-8760
+//-         p(style="margin: 0; color: #333;")
+//-           img(src="https://img.icons8.com/ios-filled/14/1a6f37/marker.png")
+//-           | &nbsp;1371 Oakland Rd. San Jose, CA, 95112
+//-         p(style="margin: 0; color: #333;")
+//-           img(src="https://img.icons8.com/ios-filled/14/1a6f37/domain.png")
+//-           a(href="https://staging.networkpcb.com/", style="color: #1a6f37; text-decoration: none;") &nbsp;https://networkpcb.com/
+//-         p(style="margin: 0; color: #333;")
+//-           img(src="https://img.icons8.com/ios-filled/14/1a6f37/new-post.png")
+//-           a(href="mailto:info@networkpcb.com", style="color: #1a6f37; text-decoration: none;") &nbsp;info@networkpcb.com
+
+//-         .cta
+//-           a(href="https://staging.networkpcb.com/request", target="_blank") Request for Quote
+
+
+
+
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Thank You for Contacting Us – NetworkPCB
+    style.
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f5f9f6;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        max-width: 600px;
+        margin: 30px auto;
+        background-color: #ffffff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        font-size: 16px;
+        line-height: 1.6;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .header {
+        background-color: #e9f5ee;
+        padding: 24px;
+        text-align: center;
+        border-bottom: 3px solid #1a6f37;
+      }
+      .header img {
+        max-width: 180px;
+      }
+      .content {
+        padding: 30px;
+        padding-bottom: 20px;
+      }
+      .content p, .details p {
+        color: #333;
+        margin-bottom: 14px;
+        text-align: left;
+      }
+      .details {
+        background-color: #f9fdfb;
+        padding: 20px;
+        border: 1px solid #e0eee8;
+        border-radius: 6px;
+        margin-top: 20px;
+        margin-bottom: 0;
+      }
+      .details p:last-child {
+        margin-bottom: 4px;
+      }
+      .footer {
+        text-align: left;
+        padding: 24px 30px 30px;
+        font-size: 14px;
+        color: #555;
+        background-color: #f0f5f1;
+        border-top: 1px solid #dce9e1;
+      }
+      .footer p {
+        margin: 6px 0;
+      }
+      .footer a {
+        color: #1a6f37;
+        text-decoration: none;
+      }
+      .footer .name {
+        font-weight: bold;
+        font-size: 16px;
+        color: #1a6f37;
+        margin-top: 10px;
+      }
+      .cta {
+        margin-top: 14px;
+      }
+      .cta a {
+        background-color: #1a6f37;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+      }
+      .cta a:hover {
+        background-color: #155c2d;
+      }
+
+  body
+    .container
+      .header
+        img(
+          src="https://staging.networkpcb.com/_next/image?url=%2Fnpcb_logo.png&w=256&q=75",
+          alt="NetworkPCB Logo"
+        )
+
+      .content
+        p Hi #{name},
+        p Thank you for reaching out to us. We’ve received your message and one of our team members will get back to you as soon as possible.
+        p Here is a copy of your request:
+
+        .details
+          p
+            strong Name:
+            |  #{name}
+          p
+            strong Email:
+            |  #{email}
+          p
+            strong Mobile:
+            |  #{mobile}
+          p
+            strong Company:
+            |  #{company}
+          p
+            strong Message:
+            |  #{message}
+          p
+            strong Submitted On:
+            |  #{createdAtPST}
+
+      .footer
+        p(style="margin: 0; font-size: 14.5px; color: #333;")
+          | We appreciate your interest and look forward to assisting you.
+        p(style="margin: 20px 0 6px; font-size: 16px; color: #333;")
+          | Best regards,
+        p(style="font-weight: bold; margin: 0; font-size: 16px; color: #1a6f37;")
+          | NetworkPCB
+
+        p(style="margin: 0; color: #333;")
+          img(src="https://img.icons8.com/ios-filled/14/1a6f37/phone.png")
+          | &nbsp;+1 (408) 943-8760
+        p(style="margin: 0; color: #333;")
+          img(src="https://img.icons8.com/ios-filled/14/1a6f37/marker.png")
+          | &nbsp;1371 Oakland Rd. San Jose, CA, 95112
+        p(style="margin: 0; color: #333;")
+          img(src="https://img.icons8.com/ios-filled/14/1a6f37/domain.png")
+          a(href="https://staging.networkpcb.com/", style="color: #1a6f37; text-decoration: none;")
+            | &nbsp;https://networkpcb.com/
+        p(style="margin: 0; color: #333;")
+          img(src="https://img.icons8.com/ios-filled/14/1a6f37/new-post.png")
+          a(href="mailto:info@networkpcb.com", style="color: #1a6f37; text-decoration: none;")
+            | &nbsp;info@networkpcb.com
+
+        .cta
+          a(href="https://staging.networkpcb.com/request", target="_blank")
+            | Request for Quote
+
+        p(style="margin: 4px 0; font-size: 14.5px; color: #333;")
+          | If you did not make this submission, please ignore this email.
+        p(style="margin: 4px 0; font-size: 14.5px; color: #333;")
+          | © 2025 NetworkPCB. All rights reserved.

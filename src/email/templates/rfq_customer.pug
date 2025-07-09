@@ -1,0 +1,495 @@
+
+
+//- doctype html
+//- html(lang="en")
+//-   head
+//-     meta(charset="UTF-8")
+//-     meta(name="viewport", content="width=device-width, initial-scale=1.0")
+//-     title Thank You for Your Submission – NetworkPCB
+//-     style.
+//-       body {
+//-         margin: 0;
+//-         padding: 0;
+//-         background-color: #f5f9f6;
+//-         font-family: Arial, sans-serif;
+//-       }
+//-       .container {
+//-         max-width: 600px;
+//-         margin: 30px auto;
+//-         background-color: #ffffff;
+//-         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+//-         font-size: 16px;
+//-         line-height: 1.6;
+//-         border-radius: 8px;
+//-         overflow: hidden;
+//-       }
+//-       .header {
+//-         text-align: center;
+//-         background-color: #e9f5ee;
+//-         padding: 24px;
+//-         border-bottom: 3px solid #1a6f37;
+//-       }
+//-       .header img {
+//-         max-width: 180px;
+//-         height: auto;
+//-       }
+//-       .content {
+//-         padding: 30px;
+//-       }
+//-       h3 {
+//-         color: #1a6f37;
+//-         font-size: 17px;
+//-         margin-top: 25px;
+//-         margin-bottom: 12px;
+//-       }
+//-       .content p {
+//-         color: #333;
+//-         margin-bottom: 14px;
+//-       }
+//-       .card {
+//-         background-color: #f8faf9;
+//-         padding: 20px;
+//-         border-radius: 8px;
+//-         margin-bottom: 20px;
+//-         box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+//-       }
+//-       .data-row {
+//-         display: flex;
+//-         margin-bottom: 10px;
+//-         flex-wrap: wrap;
+//-       }
+//-       .data-label {
+//-         width: 140px;
+//-         font-weight: bold;
+//-         color: #1a6f37;
+//-         flex-shrink: 0;
+//-       }
+//-       .data-value {
+//-         flex: 1;
+//-         color: #333;
+//-         word-break: break-word;
+//-       }
+//-       ul.services-list {
+//-         list-style: none;
+//-         padding-left: 0;
+//-       }
+//-       ul.services-list li::before {
+//-         content: "•";
+//-         color: #1a6f37;
+//-         font-weight: bold;
+//-         display: inline-block;
+//-         width: 1em;
+//-         margin-left: -1em;
+//-       }
+//-       table.rfq-details {
+//-         width: 100%;
+//-         border-collapse: collapse;
+//-         font-size: 14px;
+//-         margin-top: 10px;
+//-         table-layout: auto;
+//-       }
+//-       table.rfq-details th,
+//-       table.rfq-details td {
+//-         padding: 12px 15px;
+//-         border: 1px solid #d4d9de;
+//-         word-break: break-word;
+//-         white-space: normal;
+//-         overflow: visible;
+//-         text-overflow: unset;
+//-       }
+//-       table.rfq-details th {
+//-         background-color: #1a6f37;
+//-         color: white;
+//-         text-align: left;
+//-       }
+//-       table.rfq-details tr:nth-child(even) td {
+//-         background-color: #f0f7f3;
+//-       }
+//-       .footer {
+//-         padding-top: 10px;
+//-         padding-left: 30px;
+//-         padding-right: 30px;
+//-         font-size: 14px;
+//-         color: #777;
+//-       }
+//-       .footer .cta a {
+//-         background-color: #1a6f37;
+//-         color: white;
+//-         padding: 10px 20px;
+//-         border-radius: 5px;
+//-         text-decoration: none;
+//-         font-weight: bold;
+//-         display: inline-block;
+//-         margin: 16px 0;
+//-       }
+//-       .footer .cta a:hover {
+//-         background-color: #155c2d;
+//-       }
+//-       .contact-info {
+//-         margin-top: 20px;
+//-         font-size: 14px;
+//-         color: #555;
+//-         line-height: 1.8;
+//-       }
+//-       .contact-info img {
+//-         vertical-align: middle;
+//-         margin-right: 6px;
+//-       }
+
+//-   body
+//-     .container
+//-       .header
+//-         img(src="https://staging.networkpcb.com/_next/image?url=%2Fnpcb_logo.png&w=256&q=75" alt="NetworkPCB Logo")
+
+//-       .content
+//-         p Hi #{name || 'Customer'},
+//-         p Thank you for reaching out to us. We’ve received your message and one of our team members will get back to you as soon as possible.
+
+//-         p Here is a copy of your request:
+//-         .card
+//-           if id
+//-             .data-row
+//-               span.data-label ID:
+//-               span.data-value #{id}
+//-           if name
+//-             .data-row
+//-               span.data-label Name:
+//-               span.data-value #{name}
+//-           if company
+//-             .data-row
+//-               span.data-label Company:
+//-               span.data-value #{company}
+//-           if quantity
+//-             .data-row
+//-               span.data-label Quantity:
+//-               span.data-value #{quantity}
+//-           if mobile
+//-             .data-row
+//-               span.data-label Mobile:
+//-               span.data-value #{mobile}
+//-           if email
+//-             .data-row
+//-               span.data-label Email:
+//-               span.data-value #{email}
+//-           if projectName
+//-             .data-row
+//-               span.data-label Project Name:
+//-               span.data-value #{projectName}
+//-           if address
+//-             .data-row
+//-               span.data-label Address:
+//-               span.data-value #{address}
+//-           if description
+//-             .data-row
+//-               span.data-label Description:
+//-               span.data-value #{description}
+//-           if createdAt
+//-             .data-row
+//-               span.data-label Submitted On:
+//-               span.data-value #{createdAt}
+
+//-         if services && services.length > 0
+//-           h3 Services Requested
+//-           .card
+//-             ul.services-list
+//-               each service in services
+//-                 li #{service.name || 'Unknown Service'}
+
+//-         if rfqSpecifications && rfqSpecifications.length > 0
+//-           h3 RFQ Specifications
+//-           .card
+//-             table.rfq-details
+//-               thead
+//-                 tr
+//-                   th Specification Name
+//-                   th Value
+//-               tbody
+//-                 each spec in rfqSpecifications
+//-                   tr
+//-                     td #{spec.specification ? spec.specification.name : 'Unknown Specification'}
+//-                     td #{spec.value || 'N/A'}
+
+//-         if files && files.length > 0
+//-           h3 Uploaded Files
+//-           .card
+//-             ul
+//-               each file in files
+//-                 li #{file.originalname}
+
+//-         .footer
+//-           p(style="margin: 0; font-size: 14.5px; color: #333;") We appreciate your interest and look forward to assisting you.
+//-           p(style="margin: 4px 0; font-size: 14.5px; color: #333;") If you did not make this submission, please ignore this email.
+//-           p(style="margin: 4px 0; font-size: 14.5px; color: #333;") &copy; 2025 NetworkPCB. All rights reserved.
+//-           p(style="margin: 20px 0 6px; font-size: 16px; color: #333;") Best regards,
+//-           p(style="font-weight: bold; margin: 0; font-size: 16px; color: #1a6f37;") Network PCB
+
+//-           .contact-info
+//-             p(style="margin: 0;")
+//-               img(src="https://img.icons8.com/ios-filled/14/1a6f37/phone.png")
+//-               | &nbsp;+1 (408) 943-8760
+//-             p(style="margin: 0;")
+//-               img(src="https://img.icons8.com/ios-filled/14/1a6f37/marker.png")
+//-               | &nbsp;1371 Oakland Rd. San Jose, CA, 95112
+//-             p(style="margin: 0;")
+//-               img(src="https://img.icons8.com/ios-filled/14/1a6f37/domain.png")
+//-               a(href="https://staging.networkpcb.com/", style="color: #1a6f37; text-decoration: none;") &nbsp;https://networkpcb.com/
+//-             p(style="margin: 0;")
+//-               img(src="https://img.icons8.com/ios-filled/14/1a6f37/new-post.png")
+//-               a(href="mailto:info@networkpcb.com", style="color: #1a6f37; text-decoration: none;") &nbsp;info@networkpcb.com
+
+//-           .cta
+//-             a(href="https://staging.networkpcb.com/contact" target="_blank") Contact Support
+
+
+
+
+
+
+
+
+
+
+
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Thank You for Your Submission – NetworkPCB
+    style.
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f5f9f6;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        max-width: 600px;
+        margin: 30px auto;
+        background-color: #ffffff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        font-size: 16px;
+        line-height: 1.6;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .header {
+        text-align: center;
+        background-color: #e9f5ee;
+        padding: 24px;
+        border-bottom: 3px solid #1a6f37;
+      }
+      .header img {
+        max-width: 180px;
+        height: auto;
+      }
+      .content {
+        padding: 30px;
+      }
+      h3 {
+        color: #1a6f37;
+        font-size: 17px;
+        margin-top: 25px;
+        margin-bottom: 12px;
+      }
+      .content p {
+        color: #333;
+        margin-bottom: 14px;
+      }
+      .card {
+        background-color: #f8faf9;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+      }
+      .data-row {
+        display: flex;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+      .data-label {
+        width: 140px;
+        font-weight: bold;
+        color: #1a6f37;
+        flex-shrink: 0;
+      }
+      .data-value {
+        flex: 1;
+        color: #333;
+        word-break: break-word;
+      }
+      ul.services-list {
+        list-style: none;
+        padding-left: 0;
+      }
+      ul.services-list li::before {
+        content: "•";
+        color: #1a6f37;
+        font-weight: bold;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+      }
+      table.rfq-details {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        margin-top: 10px;
+        table-layout: auto;
+      }
+      table.rfq-details th,
+      table.rfq-details td {
+        padding: 12px 15px;
+        border: 1px solid #d4d9de;
+        word-break: break-word;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+      }
+      table.rfq-details th {
+        background-color: #1a6f37;
+        color: white;
+        text-align: left;
+      }
+      table.rfq-details tr:nth-child(even) td {
+        background-color: #f0f7f3;
+      }
+      .footer {
+        padding: 30px;
+        font-size: 14px;
+        color: #777;
+        background-color: #f0f5f1;
+        border-top: 1px solid #dce9e1;
+      }
+      .footer .cta a {
+        background-color: #1a6f37;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        margin: 16px 0;
+      }
+      .footer .cta a:hover {
+        background-color: #155c2d;
+      }
+      .contact-info {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #555;
+        line-height: 1.8;
+      }
+      .contact-info img {
+        vertical-align: middle;
+        margin-right: 6px;
+      }
+
+  body
+    .container
+      .header
+        img(src="https://staging.networkpcb.com/_next/image?url=%2Fnpcb_logo.png&w=256&q=75", alt="NetworkPCB Logo")
+
+      .content
+        p Hi #{name || 'Customer'},
+        p Thank you for reaching out to us. We’ve received your message and one of our team members will get back to you as soon as possible.
+        p Here is a copy of your request:
+
+        .card
+          if id
+            .data-row
+              span.data-label ID:
+              span.data-value #{id}
+          if name
+            .data-row
+              span.data-label Name:
+              span.data-value #{name}
+          if company
+            .data-row
+              span.data-label Company:
+              span.data-value #{company}
+          if quantity
+            .data-row
+              span.data-label Quantity:
+              span.data-value #{quantity}
+          if mobile
+            .data-row
+              span.data-label Mobile:
+              span.data-value #{mobile}
+          if email
+            .data-row
+              span.data-label Email:
+              span.data-value #{email}
+          if projectName
+            .data-row
+              span.data-label Project Name:
+              span.data-value #{projectName}
+          if address
+            .data-row
+              span.data-label Address:
+              span.data-value #{address}
+          if description
+            .data-row
+              span.data-label Description:
+              span.data-value #{description}
+          if createdAt
+            .data-row
+              span.data-label Submitted On:
+              span.data-value #{createdAt}
+
+        if services && services.length > 0
+          h3 Services Requested
+          .card
+            ul.services-list
+              each service in services
+                li #{service.name || 'Unknown Service'}
+
+        if rfqSpecifications && rfqSpecifications.length > 0
+          h3 RFQ Specifications
+          .card
+            table.rfq-details
+              thead
+                tr
+                  th Specification Name
+                  th Value
+              tbody
+                each spec in rfqSpecifications
+                  tr
+                    td #{spec.specification ? spec.specification.name : 'Unknown Specification'}
+                    td #{spec.value || 'N/A'}
+
+        if files && files.length > 0
+          h3 Uploaded Files
+          .card
+            ul
+              each file in files
+                li #{file.originalname}
+
+      .footer
+        p(style="margin: 0; font-size: 14.5px; color: #333;") We appreciate your interest and look forward to assisting you.
+        p(style="margin: 20px 0 6px; font-size: 16px; color: #333;") Best regards,
+        p(style="font-weight: bold; margin: 0; font-size: 16px; color: #1a6f37;") NetworkPCB
+
+        .contact-info
+          p(style="margin: 0;")
+            img(src="https://img.icons8.com/ios-filled/14/1a6f37/phone.png")
+            | &nbsp;+1 (408) 943-8760
+          p(style="margin: 0;")
+            img(src="https://img.icons8.com/ios-filled/14/1a6f37/marker.png")
+            | &nbsp;1371 Oakland Rd. San Jose, CA, 95112
+          p(style="margin: 0;")
+            img(src="https://img.icons8.com/ios-filled/14/1a6f37/domain.png")
+            a(href="https://staging.networkpcb.com/", style="color: #1a6f37; text-decoration: none;")
+              | &nbsp;https://networkpcb.com/
+          p(style="margin: 0;")
+            img(src="https://img.icons8.com/ios-filled/14/1a6f37/new-post.png")
+            a(href="mailto:info@networkpcb.com", style="color: #1a6f37; text-decoration: none;")
+              | &nbsp;info@networkpcb.com
+
+        .cta
+          a(href="https://staging.networkpcb.com/contact", target="_blank") Contact Support
+
+        // 👇️ moved to very bottom
+        p(style="margin: 4px 0; font-size: 14.5px; color: #333;") If you did not make this submission, please ignore this email.
+        p(style="margin: 4px 0; font-size: 14.5px; color: #333;") &copy; 2025 NetworkPCB. All rights reserved.
