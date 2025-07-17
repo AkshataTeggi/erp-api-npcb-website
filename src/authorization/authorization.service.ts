@@ -278,9 +278,9 @@
 //   }
 // }
 
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { CreateRoleDto } from './dto/role.dto';
+import { CreateRoleDto, UpdateRoleDto } from './dto/role.dto';
 
 @Injectable()
 export class AuthorizationService {
@@ -288,7 +288,7 @@ export class AuthorizationService {
 
   // ----------------- ROLES -----------------
 async createRole(dto: CreateRoleDto) {
-    const { name, description, organizationId, permissionIds } = dto;
+    const { name, description, isActive, organizationId, permissionIds } = dto;
 
     console.log('Creating role:', dto);
 
@@ -298,7 +298,8 @@ async createRole(dto: CreateRoleDto) {
         data: {
           name,
           description,
-          organizationId,
+        organizationId: 'cmd7a5xx30000722g92gv3k3i', // 🔒 Hardcoded
+         isActive,
         },
       });
 
@@ -356,12 +357,50 @@ async createRole(dto: CreateRoleDto) {
     return role;
   }
 
-  async updateRole(id: string, data: { name?: string; description?: string }) {
-    return this.prisma.role.update({
-      where: { id },
-      data,
+  // async updateRole(id: string, data: { name?: string; description?: string }) {
+  //   return this.prisma.role.update({
+  //     where: { id },
+  //     data,
+  //   });
+  // }
+
+
+async updateRole(id: string, dto: UpdateRoleDto) {
+  const existingRole = await this.prisma.role.findUnique({ where: { id } });
+  if (!existingRole) throw new NotFoundException('Role not found');
+
+  const { name, description, isActive, permissionIds } = dto;
+
+  const data: any = {
+    ...(name && { name }),
+    ...(description && { description }),
+    ...(isActive !== undefined && { isActive }),
+  };
+
+  await this.prisma.role.update({
+    where: { id },
+    data,
+  });
+
+  // Optional: Update role-permission mapping
+  if (permissionIds !== undefined) {
+    if (permissionIds.length === 0) {
+      throw new BadRequestException('A role must contain at least one permission.');
+    }
+
+    await this.prisma.rolePermission.deleteMany({ where: { roleId: id } });
+
+    await this.prisma.rolePermission.createMany({
+      data: permissionIds.map((permissionId) => ({
+        roleId: id,
+        permissionId,
+      })),
     });
   }
+
+  return this.getRoleById(id);
+}
+
 
   async deleteRoleById(id: string) {
     return this.prisma.role.update({

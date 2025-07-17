@@ -84,6 +84,9 @@ export class CreateRoleDto {
   @IsOptional()
   description?: string;
 
+    @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
   @IsString()
   @IsNotEmpty()
   organizationId: string;
