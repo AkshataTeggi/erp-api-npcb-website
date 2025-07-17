@@ -283,55 +283,63 @@ import { BadRequestException, Injectable, InternalServerErrorException, NotFound
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateRoleDto, UpdateRoleDto } from './dto/role.dto';
 
+
+
 @Injectable()
 export class AuthorizationService {
   constructor(private readonly prisma: PrismaService) {}
 
+
+
   // ----------------- ROLES -----------------
 async createRole(dto: CreateRoleDto) {
-    const { name, description, isActive, permissionIds } = dto;
+  const {
+    name,
+    description,
+    isActive = true,
+    permissionIds,
+    organizationId,
+  } = dto;
 
-    console.log('Creating role:', dto);
+  const DEFAULT_ORGANIZATION_ID = 'cmd7a5xx30000722g92gv3k3i';
 
-    try {
-      // 1. Create the role
-      const role = await this.prisma.role.create({
-        data: {
-          name,
-          description,
-        organizationId: 'cmd7a5xx30000722g92gv3k3i', // 🔒 Hardcoded
-         isActive,
-        },
+  try {
+    const role = await this.prisma.role.create({
+      data: {
+        name,
+        description,
+        organizationId: organizationId || DEFAULT_ORGANIZATION_ID,
+        isActive,
+      },
+    });
+
+    if (permissionIds?.length) {
+      await this.prisma.rolePermission.createMany({
+        data: permissionIds.map((permissionId) => ({
+          roleId: role.id,
+          permissionId,
+        })),
       });
-
-      // 2. Connect permissions via RolePermission table
-      if (permissionIds?.length) {
-        await this.prisma.rolePermission.createMany({
-          data: permissionIds.map((permissionId) => ({
-            roleId: role.id,
-            permissionId,
-          })),
-        });
-      }
-
-      // 3. Optionally return the role with its permissions
-      const fullRole = await this.prisma.role.findUnique({
-        where: { id: role.id },
-        include: {
-          permissions: {
-            include: {
-              permission: true,
-            },
-          },
-        },
-      });
-
-      return fullRole;
-    } catch (error) {
-      console.error('Error creating role:', error);
-      throw new InternalServerErrorException('Failed to create role');
     }
+
+    const fullRole = await this.prisma.role.findUnique({
+      where: { id: role.id },
+      include: {
+        permissions: {
+          include: { permission: true },
+        },
+      },
+    });
+
+    return fullRole;
+  } catch (error) {
+    console.error(
+      'Error creating role:',
+      error instanceof Error ? error.message : JSON.stringify(error),
+    );
+    throw new InternalServerErrorException('Failed to create role');
   }
+}
 
   async getAllRoles() {
     return this.prisma.role.findMany({

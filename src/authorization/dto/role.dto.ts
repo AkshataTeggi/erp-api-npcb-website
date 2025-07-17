@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // import { IsOptional, IsString, IsBoolean, IsArray } from 'class-validator';
 
 // export class CreateRoleDto {
@@ -87,9 +88,12 @@ export class CreateRoleDto {
     @IsOptional()
   @IsBoolean()
   isActive?: boolean;
-  @IsString()
-  @IsNotEmpty()
-  organizationId: string;
+
+  
+  @IsOptional()
+@IsString()
+organizationId?: string;
+
 
   @IsArray()
   @IsNotEmpty({ each: true })
