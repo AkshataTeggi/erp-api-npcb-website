@@ -87,6 +87,6 @@ async changeUserRole(
   // delete user
   @Delete(':id')
   async deleteUser(@Param('id') id: string) {
-    return await this.userService.softDeleteUser(id);
+    return await this.userService.hardDeleteUser(id);
   }
 }

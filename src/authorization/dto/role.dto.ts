@@ -1,33 +1,101 @@
-import { IsOptional, IsString, IsBoolean, IsArray } from 'class-validator';
+// import { IsOptional, IsString, IsBoolean, IsArray } from 'class-validator';
+
+// export class CreateRoleDto {
+
+//   @IsString()
+//   name: string;
+
+//   @IsOptional()
+//   @IsString()
+//   description?: string;
+
+//   @IsOptional()
+//   @IsBoolean()
+//   isActive?: boolean;
+
+//   @IsOptional()
+//   @IsString()
+//   departmentId?: string | null;
+
+//   @IsOptional()
+//   @IsArray()
+//   @IsString({ each: true })
+//   permissionIds?: string[];
+
+//   @IsOptional()
+//   @IsString()
+//   createdBy?: string;
+// }
+
+
+
+// export class UpdateRoleDto {
+//   @IsOptional()
+//   @IsString()
+//   name?: string;
+
+//   @IsOptional()
+//   @IsString()
+//   description?: string;
+
+//   @IsOptional()
+//   @IsBoolean()
+//   isActive?: boolean;
+
+//   @IsOptional()
+//   @IsString()
+//   departmentId?: string | null;
+
+//   @IsOptional()
+//   @IsArray()
+//   @IsString({ each: true })
+//   permissionIds?: string[];
+// }
+
+
+
+
+
+
+
+
+
+
+// export class UpdatePermissionDto {
+//   @IsOptional()
+//   @IsString()
+//   name?: string;
+
+//   @IsOptional()
+//   @IsString()
+//   description?: string;
+// }
+
+
+
+import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateRoleDto {
-
   @IsString()
+  @IsNotEmpty()
   name: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   description?: string;
 
-  @IsOptional()
-  @IsBoolean()
-  isActive?: boolean;
-
-  @IsOptional()
   @IsString()
-  departmentId?: string | null;
+  @IsNotEmpty()
+  organizationId: string;
 
-  @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  permissionIds?: string[];
+  @IsNotEmpty({ each: true })
+  permissionIds: string[];
 
   @IsOptional()
   @IsString()
   createdBy?: string;
 }
-
-
 
 export class UpdateRoleDto {
   @IsOptional()
@@ -44,22 +112,12 @@ export class UpdateRoleDto {
 
   @IsOptional()
   @IsString()
-  departmentId?: string | null;
+  organizationId?: string | null;
 
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  permissionIds?: string[];
+  permissionIds?: string[];
 }
-
-
-
-
-
-
-
-
-
 
 export class UpdatePermissionDto {
   @IsOptional()

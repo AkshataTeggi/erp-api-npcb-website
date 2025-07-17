@@ -5,11 +5,16 @@
  * url      = env("DATABASE_URL")
  * }
  */
+// datasource db {
+//   provider = "postgresql"
+//   url      = "postgresql://postgres:abc123@localhost:5432/npcbdb?schema=public"
+// }
+
+
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:abc123@localhost:5432/npcbdb?schema=public"
+  url      = env("DATABASE_URL")
 }
-
 generator client {
   provider = "prisma-client-js"
 }
