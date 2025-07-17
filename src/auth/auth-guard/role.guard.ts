@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // sir
 
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';

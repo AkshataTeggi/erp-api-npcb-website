@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // // import { Injectable } from '@nestjs/common';
 // // import { PrismaService } from 'prisma/prisma.service';
 
@@ -288,7 +289,7 @@ export class AuthorizationService {
 
   // ----------------- ROLES -----------------
 async createRole(dto: CreateRoleDto) {
-    const { name, description, isActive, organizationId, permissionIds } = dto;
+    const { name, description, isActive, permissionIds } = dto;
 
     console.log('Creating role:', dto);
 

@@ -147,8 +147,8 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { AuthorizationService } from '../authorization/authorization.service';
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { PasswordHelper } from 'src/common/helpers/password-helper';
+import { CreateUserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {

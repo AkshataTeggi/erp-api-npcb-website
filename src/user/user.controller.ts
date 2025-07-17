@@ -1,60 +1,27 @@
-// import { Controller, Post, Get, Patch, Delete, Body, Param, Request } from '@nestjs/common';
-// import { UserService } from './user.service';
-// import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
-// // import { AuthGuard } from '@nestjs/passport';
-// import { Prisma } from '@prisma/client';
-// import { UserType } from '@prisma/client';
-
-
-// @Controller('user')
-// export class UserController {
-//   constructor(private readonly userService: UserService) { }
-
-//   @Get('types')
-// getUserTypes() {
-//   console.log('UserType Enum:', UserType);
-//   return Object.values(UserType); // ['ADMIN', 'EMPLOYEE', 'CUSTOMER']
-// }
-  
-// @Post()
-// async createUser(@Body() body: CreateUserDto) {
-//   return await this.userService.createUser(body);
-// }
-
-
-import {
-  Controller,
-  Post,
-  Get,
-  Patch,
-  Delete,
-  Body,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
+/* eslint-disable prettier/prettier */
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
-import { JwtAuthGuard } from 'src/auth/auth-guard/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/auth-guard/role.guard';
-import { Roles } from 'src/auth/decorator/role.decorator';
+// import { AuthGuard } from '@nestjs/passport';
 import { UserType } from '@prisma/client';
+import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Get('types')
-  getUserTypes() {
-    return Object.values(UserType);
-  }
+getUserTypes() {
+  console.log('UserType Enum:', UserType);
+  return Object.values(UserType); // ['ADMIN', 'EMPLOYEE', 'CUSTOMER']
+}
+  
+@Post()
+async createUser(@Body() body: CreateUserDto) {
+  return await this.userService.createUser(body);
+}
 
-  // ✅ Only ADMIN can create user
-  @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
-  async createUser(@Body() body: CreateUserDto) {
-    return await this.userService.createUser(body);
-  }
+
   // Assign a role to a user
   @Post(':id/roles/:roleId')
   async assignRoleToUser(
