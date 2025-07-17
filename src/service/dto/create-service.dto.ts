@@ -21,6 +21,10 @@ export class CreateServiceDto {
   @IsOptional()
   parentId?: string;
 
+    @IsOptional()
+  @IsString()
+  slug?: string; // 👈 Add this
+
 }
 
 
@@ -37,4 +41,8 @@ export class UpdateServiceDto {
   @IsBoolean()
   isActive?: boolean;
  
+  @IsOptional()
+  @IsString()
+  slug?: string; // 👈 Add this
+
 }

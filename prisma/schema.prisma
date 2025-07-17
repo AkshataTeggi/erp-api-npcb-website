@@ -109,6 +109,8 @@ model Organization {
 model Service {
   id             String          @id @default(cuid())
   name           String          @unique
+  slug           String?         @unique // 👈 optional + unique
+
   description    String?
   isActive       Boolean         @default(true)
   specifications Specification[] // List of specifications linked to this service
@@ -172,7 +174,8 @@ model RfqSpecification {
   specificationId String
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
-  Allowedunits   Unit[]             // ✅ Store unit directly
+  Allowedunits   Unit[]             // ✅ Store unit directly         
+
 }
 
 

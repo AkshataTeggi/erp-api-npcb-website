@@ -15,13 +15,15 @@ export class CreateSpecificationDto {
 
   @IsOptional()
   @IsEnum(Unit)
-  defaultUnit?:string;
+  defaultUnit?: Unit; // ✅ Corrected: Should be enum not string
 
   @IsOptional()
   @IsArray()
-  @IsString({ each: true }) 
+  @IsEnum(Unit, { each: true }) // ✅ Use IsEnum for array elements
   allowedUnits?: Unit[];
+
   @IsOptional()
+
   @IsArray()
   @IsString({ each: true })
   suggestions?: string[]; // Predefined values for SELECT & BOOLEAN
@@ -61,6 +63,7 @@ export class CreateSpecificationDto {
   @IsOptional()
   specificationGroupId?: string;
 
+
   @IsOptional()
   @IsUUID() // Ensures it's a valid UUID
   parentId?: string; 
@@ -95,7 +98,7 @@ export class UpdateSpecificationDto {
 
   @IsOptional()
   @IsString() // ✅ `unit` should be a single string, not an array
-  defaultUnit?: string;
+  defaultUnit?: Unit;
 
   @IsOptional()
   @IsBoolean()
@@ -139,10 +142,11 @@ export class CreateSubSpecificationDto {
   @IsBoolean()
   isActive: boolean; // Whether this sub-specification is active
 
-  @IsString()
-  defaultUnit: string; // Default unit for sub-specification
+   @IsOptional()
+  @IsEnum(Unit)
+  defaultUnit?: Unit; // ✅ Corrected: Should be enum not string
 
   @IsArray()
   @IsEnum(Unit, { each: true })
-  allowedUnits: Unit[]; // Allowed units for sub-specification
+  allowedUnits: Unit[];
 }
