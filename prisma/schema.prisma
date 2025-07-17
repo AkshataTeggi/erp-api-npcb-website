@@ -7,7 +7,7 @@
  */
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://npcbadmin:123Digital@localhost:5432/nbpcv1?schema=public"
+  url      = "postgresql://postgres:abc123@localhost:5432/npcbdb?schema=public"
 }
 
 generator client {
@@ -244,49 +244,6 @@ model File {
   rfq          Rfq?     @relation(fields: [modelId], references: [id], onDelete: Cascade)
 }
 
-// Role Model
-model Role {
-  id             String           @id @default(cuid())
-  name           String           @unique
-  description    String?
-  permissions    RolePermission[]
-  organizationId String
-  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  isActive       Boolean          @default(true)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  deletedAt      DateTime?
-  createdBy      String?
-  updatedBy      String?
-  users          User[]
-}
-
-// Permission Model
-model Permission {
-  id          String           @id @default(cuid())
-  name        String           @unique
-  description String?
-  metadata    Json?
-  isActive    Boolean          @default(true)
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  deletedAt   DateTime?
-  createdBy   String?
-  updatedBy   String?
-  roles       RolePermission[]
-}
-
-// RolePermission Model
-model RolePermission {
-  id           String     @id @default(cuid())
-  roleId       String
-  permissionId String
-  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @default(now())
-}
-
 // Audit Logs
 model AuditLog {
   id              String   @id @default(cuid())
@@ -377,3 +334,49 @@ model EmailRecipient {
   updatedAt    DateTime @updatedAt
 }
 
+
+
+
+
+// Role Model
+model Role {
+  id             String           @id @default(cuid())
+  name           String           @unique
+  description    String?
+  permissions    RolePermission[]
+  organizationId String
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  isActive       Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  deletedAt      DateTime?
+  createdBy      String?
+  updatedBy      String?
+  users          User[]
+}
+
+// Permission Model
+model Permission {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  description String?
+  metadata    Json?
+  isActive    Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  deletedAt   DateTime?
+  createdBy   String?
+  updatedBy   String?
+  roles       RolePermission[]
+}
+
+// RolePermission Model
+model RolePermission {
+  id           String     @id @default(cuid())
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @default(now())
+}

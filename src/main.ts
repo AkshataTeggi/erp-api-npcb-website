@@ -38,7 +38,7 @@ app.useStaticAssets(join(__dirname, '../../assets'), { prefix: '/files/' });
   SwaggerModule.setup('api/docs', app, document);
 
   // ✅ Start the server
-  await app.listen(4000);
+  await app.listen(3000);
 }
 bootstrap();
 
