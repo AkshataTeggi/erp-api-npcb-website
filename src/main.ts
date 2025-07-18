@@ -9,9 +9,50 @@ import * as bodyParser from 'body-parser';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+<<<<<<< Updated upstream
   // Increase body size limit
   app.use(bodyParser.json({ limit: '5000mb' }));
   app.use(bodyParser.urlencoded({ extended: true, limit: '5000mb' }));
+=======
+app.use(bodyParser.json({ limit: '5000mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '5000mb' }))
+
+app.use((req, res, next) => {
+    req.setTimeout(60 * 60 * 1000); 
+    res.setTimeout(60 * 60 * 1000); 
+    next();
+  });
+
+  const config = new DocumentBuilder()
+    .setTitle('My API Documentation')
+    .setDescription('API documentation for my NestJS application')
+    .setVersion('1.0')
+    .addBearerAuth() // Adds authorization header for JWT
+    .build();
+
+  app.enableCors({
+
+    origin: ['http://localhost:3000', 'http://192.168.0.120:3000', "http://localhost:3000", "http://localhost:3001", "http://192.168.0.120:3001"],
+
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
+    allowedHeaders: 'Content-Type,Authorization', // Allowed headers
+    credentials: true, // Allow credentials (cookies, auth headers, etc.)
+  });
+
+app.useStaticAssets(join(__dirname, '../../assets'), { prefix: '/files/' });
+
+  // ✅ Set up Swagger docs
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document);
+
+  // ✅ Start the server
+
+await app.listen(3000, '0.0.0.0');
+
+  await app.listen(3001);
+}
+bootstrap();
+>>>>>>> Stashed changes
 
   // Increase request timeout
   app.use((req, res, next) => {
