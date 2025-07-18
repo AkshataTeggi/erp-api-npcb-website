@@ -279,6 +279,9 @@
 //   }
 // }
 
+
+
+
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateRoleDto, UpdateRoleDto } from './dto/role.dto';
@@ -291,7 +294,57 @@ export class AuthorizationService {
 
 
 
-  // ----------------- ROLES -----------------
+//   // ----------------- ROLES -----------------
+// async createRole(dto: CreateRoleDto) {
+//   const {
+//     name,
+//     description,
+//     isActive = true,
+//     permissionIds,
+//     organizationId,
+//   } = dto;
+
+//   const DEFAULT_ORGANIZATION_ID = 'cmd7a5xx30000722g92gv3k3i';
+
+//   try {
+//     const role = await this.prisma.role.create({
+//       data: {
+//         name,
+//         description,
+//         organizationId: organizationId || DEFAULT_ORGANIZATION_ID,
+//         isActive,
+//       },
+//     });
+
+//     if (permissionIds?.length) {
+//       await this.prisma.rolePermission.createMany({
+//         data: permissionIds.map((permissionId) => ({
+//           roleId: role.id,
+//           permissionId,
+//         })),
+//       });
+//     }
+
+//     const fullRole = await this.prisma.role.findUnique({
+//       where: { id: role.id },
+//       include: {
+//         permissions: {
+//           include: { permission: true },
+//         },
+//       },
+//     });
+
+//     return fullRole;
+//   } catch (error) {
+//     console.error(
+//       'Error creating role:',
+//       error instanceof Error ? error.message : JSON.stringify(error),
+//     );
+//     throw new InternalServerErrorException('Failed to create role');
+//   }
+// }
+
+
 async createRole(dto: CreateRoleDto) {
   const {
     name,
@@ -301,15 +354,13 @@ async createRole(dto: CreateRoleDto) {
     organizationId,
   } = dto;
 
-  const DEFAULT_ORGANIZATION_ID = 'cmd7a5xx30000722g92gv3k3i';
-
   try {
     const role = await this.prisma.role.create({
       data: {
         name,
         description,
-        organizationId: organizationId || DEFAULT_ORGANIZATION_ID,
         isActive,
+        ...(organizationId && { organizationId }), // only add if provided
       },
     });
 
@@ -340,6 +391,7 @@ async createRole(dto: CreateRoleDto) {
     throw new InternalServerErrorException('Failed to create role');
   }
 }
+
 
   async getAllRoles() {
     return this.prisma.role.findMany({

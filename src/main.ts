@@ -41,6 +41,7 @@ async function bootstrap() {
       'http://localhost:3001',
       'http://192.168.0.120:3000',
       'http://192.168.0.120:3001',
+      'http://192.168.0.120:3001',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
