@@ -23,11 +23,13 @@ import { CustomerModule } from './customer/customer.module';
 import { SpecificationGroupModule} from './specgroup/specgroup.module'; // Import SpecGroupModule
 import { NotificationModule } from './notification/notification.module';
 import { NotificationsGateway } from './notification/notification.gateway';
+import { ConfigModule } from '@nestjs/config';
+import { JwtAuthGuard } from './auth/auth-guard/jwt-auth.guard';
 
 
 
 @Module({
-  imports: [
+  imports: [ConfigModule.forRoot({ isGlobal: true }),
     UploadModule, PrismaModule, UserModule, NotificationsGateway,CommonModule, AuthModule, AuthorizationModule, RfqModule,ContactModule,CustomerModule,SpecificationGroupModule,NotificationModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../assets'), // Point this to the directory containing your static files
@@ -40,10 +42,10 @@ import { NotificationsGateway } from './notification/notification.gateway';
   ],
   controllers: [AppController,],
   providers: [AppService,
-    // {
-    //   provide:APP_GUARD,
-    //   useClass:JwtAuthGuard
-    // },
+    {
+      provide:APP_GUARD,
+      useClass:JwtAuthGuard
+    },
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,

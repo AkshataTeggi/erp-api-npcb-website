@@ -79,7 +79,7 @@ import {
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
-export class EnhancedPermissionGuard implements CanActivate {
+export class PermissionGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
