@@ -157,40 +157,78 @@ export class UserService {
     private readonly authorizationService: AuthorizationService,
   ) {}
 
+  // async createUser(dto: CreateUserDto) {
+  //   const role = await this.prisma.role.findUnique({
+  //     where: { name: dto.role },
+  //   });
+
+  //   if (!role) {
+  //     throw new BadRequestException('Invalid role');
+  //   }
+
+  //   const hashedPassword = await PasswordHelper.hashPassword(dto.password);
+
+  //   return this.prisma.user.create({
+  //     data: {
+  //       fullname: dto.fullname,
+  //       email: dto.email,
+  //       password: hashedPassword,
+  //       mobile: dto.mobile,
+  //       username: dto.username,
+  //       role: { connect: { id: role.id } },
+  //       createdBy: dto.createdBy,
+  //     },
+  //     include: {
+  //       role: {
+  //         include: {
+  //           permissions: {
+  //             include: {
+  //               permission: true,
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
+
+
+
   async createUser(dto: CreateUserDto) {
-    const role = await this.prisma.role.findUnique({
-      where: { name: dto.role },
-    });
+  const role = await this.prisma.role.findUnique({
+    where: { id: dto.roleId },  // Use roleId here
+  });
 
-    if (!role) {
-      throw new BadRequestException('Invalid role');
-    }
+  if (!role) {
+    throw new BadRequestException('Invalid role');
+  }
 
-    const hashedPassword = await PasswordHelper.hashPassword(dto.password);
+  const hashedPassword = await PasswordHelper.hashPassword(dto.password);
 
-    return this.prisma.user.create({
-      data: {
-        fullname: dto.fullname,
-        email: dto.email,
-        password: hashedPassword,
-        mobile: dto.mobile,
-        username: dto.username,
-        role: { connect: { id: role.id } },
-        createdBy: dto.createdBy,
-      },
-      include: {
-        role: {
-          include: {
-            permissions: {
-              include: {
-                permission: true,
-              },
+  return this.prisma.user.create({
+    data: {
+      fullname: dto.fullname,
+      email: dto.email,
+      password: hashedPassword,
+      mobile: dto.mobile,
+      username: dto.username,
+      role: { connect: { id: role.id } },
+      createdBy: dto.createdBy,
+    },
+    include: {
+      role: {
+        include: {
+          permissions: {
+            include: {
+              permission: true,
             },
           },
         },
       },
-    });
-  }
+    },
+  });
+}
+
 
   async getAllUsers() {
     return this.prisma.user.findMany({

@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // import { Injectable, UnauthorizedException } from '@nestjs/common';
 // import { JwtService } from '@nestjs/jwt';
 // import { UserService } from '../user/user.service';
@@ -129,6 +131,9 @@
 
 
 
+
+
+
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
@@ -156,26 +161,61 @@ export class AuthService {
   }
 
   // Login and generate JWT + refresh token
+  // async login(email: string, password: string) {
+  //   const user = await this.userService.getUserByEmail(email);
+  //   if (!user) throw new UnauthorizedException('Invalid credentials');
+
+  //   const isPasswordValid = await PasswordHelper.validatePassword(password, user.password);
+  //   if (!isPasswordValid) throw new UnauthorizedException('Invalid credentials');
+
+  //   const rolePermissions = await this.authorizationService.getPermissionsForRole(user.roleId);
+  //   const permissions = rolePermissions.map((rp) => rp.permission.name);
+
+  //   const payload = this.buildJwtPayload(user, permissions);
+
+  //   const accessToken = this.jwtService.sign(payload);
+  //   const refreshToken = this.jwtService.sign({ sub: user.id }, { expiresIn: '7d' });
+
+  //   const hashedRefreshToken = await PasswordHelper.hashPassword(refreshToken);
+  //   await this.userService.updateUser(user.id, { refreshToken: hashedRefreshToken });
+
+  //   return { accessToken, refreshToken };
+  // }
+
+
+
+
   async login(email: string, password: string) {
-    const user = await this.userService.getUserByEmail(email);
-    if (!user) throw new UnauthorizedException('Invalid credentials');
+  const user = await this.userService.getUserByEmail(email);
+  if (!user) throw new UnauthorizedException('Invalid credentials');
 
-    const isPasswordValid = await PasswordHelper.validatePassword(password, user.password);
-    if (!isPasswordValid) throw new UnauthorizedException('Invalid credentials');
+  const isPasswordValid = await PasswordHelper.validatePassword(password, user.password);
+  if (!isPasswordValid) throw new UnauthorizedException('Invalid credentials');
 
-    const rolePermissions = await this.authorizationService.getPermissionsForRole(user.roleId);
-    const permissions = rolePermissions.map((rp) => rp.permission.name);
+  const rolePermissions = await this.authorizationService.getPermissionsForRole(user.roleId);
+  const permissions = rolePermissions.map((rp) => rp.permission.name);
 
-    const payload = this.buildJwtPayload(user, permissions);
+  const payload = this.buildJwtPayload(user, permissions);
 
-    const accessToken = this.jwtService.sign(payload);
-    const refreshToken = this.jwtService.sign({ sub: user.id }, { expiresIn: '7d' });
+  const accessToken = this.jwtService.sign(payload);
+  const refreshToken = this.jwtService.sign({ sub: user.id }, { expiresIn: '7d' });
 
-    const hashedRefreshToken = await PasswordHelper.hashPassword(refreshToken);
-    await this.userService.updateUser(user.id, { refreshToken: hashedRefreshToken });
+  const hashedRefreshToken = await PasswordHelper.hashPassword(refreshToken);
+  await this.userService.updateUser(user.id, { refreshToken: hashedRefreshToken });
 
-    return { accessToken, refreshToken };
-  }
+  const { password: _, refreshToken: __,  ...cleanUser } = user;
+
+  return {
+    accessToken,
+    refreshToken,
+    username: user.username, // or user.username if field is named like that
+    role: cleanUser.role?.name || cleanUser.role,
+    roleId: cleanUser.roleId,
+    rolePermissions,
+    ...cleanUser,
+  };
+}
+
 
   // Validate token payload (used optionally in JwtStrategy)
   async validateUser(payload: {
