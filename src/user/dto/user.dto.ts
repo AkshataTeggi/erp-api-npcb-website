@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateUserDto {
     @IsEmail()
@@ -26,10 +26,15 @@ export class CreateUserDto {
     @IsString()
     role: string;
 
+    // @IsOptional()
+    // @IsString()
+    // createdBy?: string;
+    //   roleId?: string;
     @IsOptional()
-    @IsString()
-    createdBy?: string;
-      roleId?: string;
+@IsArray()
+@IsString({ each: true })
+roleIds?: string[];
+
 }
 
 export class UpdateUserDto {
@@ -41,9 +46,11 @@ export class UpdateUserDto {
     @IsString()
     password?: string;
 
-    @IsOptional()
-    @IsString()
-    roleId?: string;
+ @IsOptional()
+@IsArray()
+@IsString({ each: true })
+roleIds?: string[];
+
 
     @IsOptional()
     @IsString()

@@ -1,145 +1,3 @@
-/* eslint-disable prettier/prettier */
-
-// import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-// import { PrismaService } from 'prisma/prisma.service';
-// import { AuthorizationService } from '../authorization/authorization.service';
-// import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
-// import { PasswordHelper } from 'src/common/helpers/password-helper';
-
-// @Injectable()
-// export class UserService {
-//   constructor(
-//     private readonly prisma: PrismaService,
-//     private readonly authorizationService: AuthorizationService,
-//   ) { }
-
-// async createUser(dto: CreateUserDto) {
-//   const role = await this.prisma.role.findUnique({
-//     where: { name: dto.role }, // Find role by name
-//   });
-
-//   if (!role) {
-//     throw new Error('Invalid role');
-//   }
-
-//   const hashedPassword = await PasswordHelper.hashPassword(dto.password);
-
-//   return this.prisma.user.create({
-//     data: {
-//       fullname: dto.fullname,
-//       email: dto.email,
-//       password: hashedPassword,
-//       mobile: dto.mobile,
-//       username: dto.username,
-//       role: { connect: { id: role.id } }, // ✅ Use connect for Prisma relation
-//       createdBy: dto.createdBy,
-//     },
-//   });
-// }
-
-
-// // Get all users
-// async getAllUsers() {
-//   const users = await this.prisma.user.findMany();  // Fetch all users
-//   console.log('Fetched users:', users);  // Log fetched users to check the data
-//   return users;
-// }
-
-
-// async assignRoleToUser(userId: string, roleId: string) {
-//   const role = await this.prisma.role.findUnique({
-//     where: { id: roleId }, // ✅ use id directly
-//   });
-//   if (!role) {
-//     throw new Error(`Role ID "${roleId}" not found`);
-//   }
-//   return this.prisma.user.update({
-//     where: { id: userId },
-//     data: { roleId: role.id },
-//     include: { role: true },
-//   });
-// }
-
-// async changeRoleFromUser(userId: string, roleId: string) {
-//   const role = await this.prisma.role.findUnique({
-//     where: { id: roleId },
-//   });
-
-//   if (!role) {
-//     throw new Error(`Role with ID "${roleId}" not found`);
-//   }
-
-//   return this.prisma.user.update({
-//     where: { id: userId },
-//     data: { roleId: role.id },
-//     include: { role: true },
-//   });
-// }
-
-//   async getUserByEmail(email: string) {
-//     console.log(`Fetching user with email: ${email}`);
-//     const user = await this.prisma.user.findUnique({
-//       where: { email },
-//       include: { role: true },
-//     });
-  
-//     console.log("User found in DB:", user);
-//     return user;
-//   }
-
-//   async removeRoleFromUser(userId: string) {
-//     try {
-//       // Define the default role ID you want to assign (you can hardcode this value if it's always the same)
-//       const defaultRoleId = 'cm78wkl3r0002p088mhaub66j';  // Set this to your predefined default role ID
-  
-//       // Now, update the user and directly assign the default role ID
-//       return await this.prisma.user.update({
-//         where: { id: userId },
-//         data: {
-//           roleId: defaultRoleId,  // Directly assign the default role ID
-//         },
-//       });
-//     } catch (error) {
-//       throw new Error(`Error removing role from user: ${error.message}`);
-//     }
-//   }
-  
-//   async updateUser(id: string, data: Partial<{ email: string; password: string; roleId: string; refreshToken: string }>) {
-//     try {
-//       return await this.prisma.user.update({
-//         where: { id },
-//         data,
-//       });
-//     } catch (error) {
-//       throw new Error(`Error updating user: ${error.message}`);
-//     }
-//   }
-//   async getUserById(id: string) {
-//     return this.prisma.user.findUnique({
-//       where: { id },  
-//     });
-//    }
-
-//   // Soft delete a user (marks as inactive)
-//   async softDeleteUser(id: string) {
-//     return await this.prisma.user.update({
-//       where: { id },
-//       data: {
-//         isActive: false,
-//         deletedAt: new Date(),
-//       },
-//     });
-//   }
-
-//   // Permanently delete a user
-//   async hardDeleteUser(id: string) {
-//     return await this.prisma.user.delete({
-//       where: { id },
-//     });
-//   }
-// }
-
-
 import {
   BadRequestException,
   Injectable,
@@ -148,7 +6,7 @@ import {
 import { PrismaService } from 'prisma/prisma.service';
 import { AuthorizationService } from '../authorization/authorization.service';
 import { PasswordHelper } from 'src/common/helpers/password-helper';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -157,87 +15,53 @@ export class UserService {
     private readonly authorizationService: AuthorizationService,
   ) {}
 
-  // async createUser(dto: CreateUserDto) {
-  //   const role = await this.prisma.role.findUnique({
-  //     where: { name: dto.role },
-  //   });
-
-  //   if (!role) {
-  //     throw new BadRequestException('Invalid role');
-  //   }
-
-  //   const hashedPassword = await PasswordHelper.hashPassword(dto.password);
-
-  //   return this.prisma.user.create({
-  //     data: {
-  //       fullname: dto.fullname,
-  //       email: dto.email,
-  //       password: hashedPassword,
-  //       mobile: dto.mobile,
-  //       username: dto.username,
-  //       role: { connect: { id: role.id } },
-  //       createdBy: dto.createdBy,
-  //     },
-  //     include: {
-  //       role: {
-  //         include: {
-  //           permissions: {
-  //             include: {
-  //               permission: true,
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
-  // }
-
-
-
   async createUser(dto: CreateUserDto) {
-  const role = await this.prisma.role.findUnique({
-    where: { id: dto.roleId },  // Use roleId here
-  });
+    const hashedPassword = await PasswordHelper.hashPassword(dto.password);
 
-  if (!role) {
-    throw new BadRequestException('Invalid role');
-  }
-
-  const hashedPassword = await PasswordHelper.hashPassword(dto.password);
-
-  return this.prisma.user.create({
-    data: {
-      fullname: dto.fullname,
-      email: dto.email,
-      password: hashedPassword,
-      mobile: dto.mobile,
-      username: dto.username,
-      role: { connect: { id: role.id } },
-      createdBy: dto.createdBy,
-    },
-    include: {
-      role: {
-        include: {
-          permissions: {
-            include: {
-              permission: true,
+    return this.prisma.user.create({
+      data: {
+        fullname: dto.fullname,
+        email: dto.email,
+        password: hashedPassword,
+        mobile: dto.mobile,
+        username: dto.username,
+       
+        userRoles: {
+          create: dto.roleIds?.map((roleId) => ({
+            role: { connect: { id: roleId } },
+          })),
+        },
+      },
+      include: {
+        userRoles: {
+          include: {
+            role: {
+              include: {
+                permissions: {
+                  include: {
+                    permission: true,
+                  },
+                },
+              },
             },
           },
         },
       },
-    },
-  });
-}
-
+    });
+  }
 
   async getAllUsers() {
     return this.prisma.user.findMany({
       include: {
-        role: {
+        userRoles: {
           include: {
-            permissions: {
+            role: {
               include: {
-                permission: true,
+                permissions: {
+                  include: {
+                    permission: true,
+                  },
+                },
               },
             },
           },
@@ -255,107 +79,37 @@ export class UserService {
       throw new NotFoundException(`Role ID "${roleId}" not found`);
     }
 
-    return this.prisma.user.update({
-      where: { id: userId },
-      data: { roleId: role.id },
-      include: {
-        role: {
-          include: {
-            permissions: {
-              include: {
-                permission: true,
-              },
-            },
-          },
-        },
+    return this.prisma.userRole.create({
+      data: {
+        user: { connect: { id: userId } },
+        role: { connect: { id: roleId } },
       },
     });
   }
 
-  async changeRoleFromUser(userId: string, roleId: string) {
+  async changeRoleFromUser(userId: string, newRoleId: string) {
     const role = await this.prisma.role.findUnique({
-      where: { id: roleId },
+      where: { id: newRoleId },
     });
 
     if (!role) {
-      throw new NotFoundException(`Role with ID "${roleId}" not found`);
+      throw new NotFoundException(`Role with ID "${newRoleId}" not found`);
     }
 
-    return this.prisma.user.update({
-      where: { id: userId },
-      data: { roleId: role.id },
-      include: {
-        role: {
-          include: {
-            permissions: {
-              include: {
-                permission: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
+    await this.prisma.userRole.deleteMany({ where: { userId } });
 
-  async getUserByEmail(email: string) {
-    console.log(`Fetching user with email: ${email}`);
-    const user = await this.prisma.user.findUnique({
-      where: { email },
-      include: {
-        role: {
-          include: {
-            permissions: {
-              include: {
-                permission: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    console.log('User found in DB:', user);
-    return user;
-  }
-
-  async getUserById(id: string) {
-    return this.prisma.user.findUnique({
-      where: { id },
-      include: {
-        role: {
-          include: {
-            permissions: {
-              include: {
-                permission: true,
-              },
-            },
-          },
-        },
+    return this.prisma.userRole.create({
+      data: {
+        user: { connect: { id: userId } },
+        role: { connect: { id: newRoleId } },
       },
     });
   }
 
   async removeRoleFromUser(userId: string) {
     try {
-      const defaultRoleId = 'cm78wkl3r0002p088mhaub66j';
-
-      return await this.prisma.user.update({
-        where: { id: userId },
-        data: {
-          roleId: defaultRoleId,
-        },
-        include: {
-          role: {
-            include: {
-              permissions: {
-                include: {
-                  permission: true,
-                },
-              },
-            },
-          },
-        },
+      return await this.prisma.userRole.deleteMany({
+        where: { userId },
       });
     } catch (error) {
       throw new Error(`Error removing role from user: ${error.message}`);
@@ -367,20 +121,49 @@ export class UserService {
     data: Partial<{
       email: string;
       password: string;
-      roleId: string;
       refreshToken: string;
+      roleIds: string[];
     }>,
   ) {
     try {
-      return await this.prisma.user.update({
+      const { roleIds, ...userData } = data;
+
+      if (userData.password) {
+        userData.password = await PasswordHelper.hashPassword(userData.password);
+      }
+
+      await this.prisma.user.update({
         where: { id },
-        data,
+        data: userData,
+      });
+
+      if (roleIds && roleIds.length > 0) {
+        await this.prisma.userRole.deleteMany({ where: { userId: id } });
+
+        await this.prisma.user.update({
+          where: { id },
+          data: {
+            userRoles: {
+              create: roleIds.map((roleId) => ({
+                role: { connect: { id: roleId } },
+              })),
+            },
+          },
+        });
+      }
+
+      return this.prisma.user.findUnique({
+        where: { id },
         include: {
-          role: {
+          userRoles: {
             include: {
-              permissions: {
+              role: {
                 include: {
-                  permission: true,
+                  permissions: {
+                    include: {
+                      permission: true,
+                    },
+                  },
                 },
               },
             },
@@ -390,6 +173,50 @@ export class UserService {
     } catch (error) {
       throw new Error(`Error updating user: ${error.message}`);
     }
+  }
+
+  async getUserByEmail(email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      include: {
+        userRoles: {
+          include: {
+            role: {
+              include: {
+                permissions: {
+                  include: {
+                    permission: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return user;
+  }
+
+  async getUserById(id: string) {
+    return this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        userRoles: {
+          include: {
+            role: {
+              include: {
+                permissions: {
+                  include: {
+                    permission: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   async softDeleteUser(id: string) {
