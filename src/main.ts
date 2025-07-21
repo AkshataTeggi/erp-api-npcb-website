@@ -1,3 +1,4 @@
+
 /* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -49,7 +50,8 @@ async function bootstrap() {
   });
 
   // Start server
-  await app.listen(3001, '0.0.0.0');
+  await app.listen(4000, '0.0.0.0');
 }
 
 bootstrap();
+

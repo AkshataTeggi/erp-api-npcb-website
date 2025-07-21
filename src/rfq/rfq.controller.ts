@@ -195,8 +195,3 @@ async deleteTrashRFQ(@Param('id') rfqId: string) {
 }
 
 }
-
-
-
-
-
