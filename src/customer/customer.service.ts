@@ -1,39 +1,140 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateCustomerDto ,UpdateCustomerDto} from './dto/customer.dto';
+import { PasswordHelper } from 'src/common/helpers/password-helper';
 
 
 @Injectable()
 export class CustomerService {
   constructor(private readonly prisma: PrismaService) {}
-  async createCustomer(customerDto: CreateCustomerDto) {
-    console.log("Received Customer Data:", customerDto);
-    const { email, name, ...customerData } = customerDto; // Extract name separately
-    const now = new Date();
+
+
+
   
-    if (!email) {
-      throw new HttpException("Customer email is required", HttpStatus.BAD_REQUEST);
+  // async createCustomer(customerDto: CreateCustomerDto) {
+  //   console.log("Received Customer Data:", customerDto);
+  //   const { email, name, ...customerData } = customerDto; // Extract name separately
+  //   const now = new Date();
+  
+  //   if (!email) {
+  //     throw new HttpException("Customer email is required", HttpStatus.BAD_REQUEST);
+  //   }
+  
+  //   const existingCustomer = await this.prisma.customer.findUnique({
+  //     where: { email },
+  //   });
+  
+  //   return this.prisma.customer.upsert({
+  //     where: { email },
+  //     update: {
+  //       ...customerData, // ✅ Update other details
+  //       updatedAt: now,
+  //     },
+  //     create: {
+  //       email, 
+  //       name, // ✅ Set name only when creating
+  //       ...customerData,
+  //       createdAt: now,
+  //     },
+  //   });
+  // }
+ 
+
+
+//customer with user 
+
+async createCustomer(dto: CreateCustomerDto, createdBy?: string) {
+  const { email, name, mobile, address, company, username, password, roleId } = dto;
+
+  try {
+    let userCreateData: any = undefined;
+
+    // Step 1: Prepare user creation data only if username is provided
+    if (username) {
+      if (!password) {
+        throw new Error('Password is required when username is provided.');
+      }
+
+      const hashedPassword = await PasswordHelper.hashPassword(password);
+
+      userCreateData = {
+        create: {
+          username,
+          email,
+          password: hashedPassword,
+          mobile,
+          fullname: name,
+          userType: 'CUSTOMER',
+        },
+      };
     }
-  
-    const existingCustomer = await this.prisma.customer.findUnique({
-      where: { email },
-    });
-  
-    return this.prisma.customer.upsert({
-      where: { email },
-      update: {
-        ...customerData, // ✅ Update other details
-        updatedAt: now,
+
+    // Step 2: Create Customer (with optional user)
+    const customer = await this.prisma.customer.create({
+      data: {
+        email,
+        name,
+        mobile,
+        address,
+        company,
+        ...(createdBy && { createdBy }),
+        ...(userCreateData && { users: userCreateData }),
       },
-      create: {
-        email, 
-        name, // ✅ Set name only when creating
-        ...customerData,
-        createdAt: now,
+      include: {
+        users: {
+          include: {
+            userRoles: {
+              include: { role: true },
+            },
+          },
+        },
       },
     });
+
+    // Step 3: Assign role if user was created and roleId is provided
+    const user = customer.users?.[0];
+    if (user && roleId) {
+      await this.prisma.userRole.upsert({
+        where: {
+          userId_roleId: {
+            userId: user.id,
+            roleId,
+          },
+        },
+        update: {},
+        create: {
+          userId: user.id,
+          roleId,
+        },
+      });
+    }
+
+    // Step 4: Return result
+    return {
+      message: 'Customer created successfully',
+      customer,
+      user,
+    };
+
+  } catch (error) {
+    // Step 5: Handle known Prisma errors
+    if (error.code === 'P2002') {
+      const target = error.meta?.target;
+      if (target?.includes('username')) {
+        throw new Error(`Username '${username}' is already taken.`);
+      }
+      if (target?.includes('email')) {
+        throw new Error(`Email '${email}' is already in use.`);
+      }
+    }
+
+    // Step 6: Re-throw unexpected errors
+    throw error;
   }
-  async updateCustomer(customerId: string, updateData: UpdateCustomerDto) {
+}
+
+
+ async updateCustomer(customerId: string, updateData: UpdateCustomerDto) {
     const now = new Date();
   
     return this.prisma.customer.update({
