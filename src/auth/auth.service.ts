@@ -26,34 +26,79 @@ export class AuthService {
   }
 
 
-  async login(email: string, password: string) {
+//   async login(email: string, password: string) {
+//   const user = await this.userService.getUserByEmail(email);
+//   if (!user) throw new UnauthorizedException('Invalid credentials');
+
+//   const isPasswordValid = await PasswordHelper.validatePassword(password, user.password);
+//   if (!isPasswordValid) throw new UnauthorizedException('Invalid credentials');
+
+//   const rolePermissions = await this.authorizationService.getPermissionsForRole(user.userRoles?.[0]?.role?.id);
+//   const permissions = rolePermissions.map((rp) => rp.permission.name);
+
+//   const payload = this.buildJwtPayload(user, permissions);
+
+//   const accessToken = this.jwtService.sign(payload);
+//   const refreshToken = this.jwtService.sign({ sub: user.id }, { expiresIn: '7d' });
+
+//   const hashedRefreshToken = await PasswordHelper.hashPassword(refreshToken);
+//   await this.userService.updateUser(user.id, { refreshToken: hashedRefreshToken });
+
+//   const { password: _, refreshToken: __,  ...cleanUser } = user;
+
+//   return {
+//     accessToken,
+//     refreshToken,
+//     username: user.username, // or user.username if field is named like that
+//     role: cleanUser.userRoles?.[0]?.role?.name,
+//     roleId: cleanUser.userRoles?.[0]?.role?.id,
+//     rolePermissions,
+//     ...cleanUser,
+//   };
+// }
+async login(email: string, password: string) {
+  // 1️⃣  Fetch user and validate credentials
   const user = await this.userService.getUserByEmail(email);
   if (!user) throw new UnauthorizedException('Invalid credentials');
 
-  const isPasswordValid = await PasswordHelper.validatePassword(password, user.password);
+  const isPasswordValid = await PasswordHelper.validatePassword(
+    password,
+    user.password,
+  );
   if (!isPasswordValid) throw new UnauthorizedException('Invalid credentials');
 
-  const rolePermissions = await this.authorizationService.getPermissionsForRole(user.userRoles?.[0]?.role?.id);
-  const permissions = rolePermissions.map((rp) => rp.permission.name);
+  // 2️⃣  Resolve the user’s (first) role and its permissions
+  const userRole = user.userRoles?.[0];      // ← assumes one role
+  const role     = userRole?.role;
+  const rolePermissions = await this.authorizationService.getPermissionsForRole(
+    role?.id,
+  );
 
-  const payload = this.buildJwtPayload(user, permissions);
+  // Build array of { id, name, description }
+  const rolePermObjects = rolePermissions.map((rp) => ({
+    id: rp.permission.id,
+    name: rp.permission.name,
+    description: rp.permission.description,
+  }));
 
-  const accessToken = this.jwtService.sign(payload);
+  const permissionNames = rolePermObjects.map((p) => p.name); // for JWT
+
+  // 3️⃣  Issue tokens
+  const payload      = this.buildJwtPayload(user, permissionNames);
+  const accessToken  = this.jwtService.sign(payload);
   const refreshToken = this.jwtService.sign({ sub: user.id }, { expiresIn: '7d' });
 
-  const hashedRefreshToken = await PasswordHelper.hashPassword(refreshToken);
-  await this.userService.updateUser(user.id, { refreshToken: hashedRefreshToken });
+  // Store hashed refresh‑token
+  const hashedRefresh = await PasswordHelper.hashPassword(refreshToken);
+  await this.userService.updateUser(user.id, { refreshToken: hashedRefresh });
 
-  const { password: _, refreshToken: __,  ...cleanUser } = user;
-
+  // 4️⃣  Return ONLY the requested fields
   return {
     accessToken,
     refreshToken,
-    username: user.username, // or user.username if field is named like that
-    role: cleanUser.userRoles?.[0]?.role?.name,
-    roleId: cleanUser.userRoles?.[0]?.role?.id,
-    rolePermissions,
-    ...cleanUser,
+    username: user.username,
+    role: role?.name ?? null,
+    rolePermissions: rolePermObjects,
   };
 }
 

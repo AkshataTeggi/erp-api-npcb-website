@@ -92,32 +92,29 @@ async createCustomer(dto: CreateCustomerDto, createdBy?: string) {
     });
 
     // Step 3: Assign role if user was created and roleId is provided
-    const user = customer.users?.[0];
-    if (user && roleId) {
+    if (customer.users?.length && roleId) {
       await this.prisma.userRole.upsert({
         where: {
           userId_roleId: {
-            userId: user.id,
+            userId: customer.users[0].id,
             roleId,
           },
         },
         update: {},
         create: {
-          userId: user.id,
+          userId: customer.users[0].id,
           roleId,
         },
       });
     }
 
-    // Step 4: Return result
+    // Step 4: Return only customer with embedded users
     return {
       message: 'Customer created successfully',
       customer,
-      user,
     };
 
   } catch (error) {
-    // Step 5: Handle known Prisma errors
     if (error.code === 'P2002') {
       const target = error.meta?.target;
       if (target?.includes('username')) {
@@ -128,7 +125,6 @@ async createCustomer(dto: CreateCustomerDto, createdBy?: string) {
       }
     }
 
-    // Step 6: Re-throw unexpected errors
     throw error;
   }
 }
@@ -145,40 +141,60 @@ async createCustomer(dto: CreateCustomerDto, createdBy?: string) {
       },
     });
   }
-
-  async getCustomerById(customerId: string) {
-    const customer = await this.prisma.customer.findUnique({
-      where: { id: customerId },
-      include: {
-        rfqs: {
-          include: {
-            services: true,
-            rfqSpecifications: {
-              include: {
-                specification: true,
-              },
+async getCustomerById(customerId: string) {
+  const customer = await this.prisma.customer.findUnique({
+    where: { id: customerId },
+    include: {
+      users: {
+        include: {
+          userRoles: {
+            include: {
+              role: true,
             },
-            files: true,
           },
         },
       },
-    });
-  
-    if (!customer) {
-      throw new HttpException("Customer not found", HttpStatus.NOT_FOUND);
-    }
-  
-    return customer;
-  }
-  
-  async findAll() {
-    return this.prisma.customer.findMany({
-      where: { deletedAt: null }, // Exclude soft-deleted customers
-      orderBy: {
-        createdAt: 'desc',
+      rfqs: {
+        include: {
+          services: true,
+          rfqSpecifications: {
+            include: {
+              specification: true,
+            },
+          },
+          files: true,
+        },
       },
-    });
+    },
+  });
+
+  if (!customer) {
+    throw new HttpException('Customer not found', HttpStatus.NOT_FOUND);
   }
+
+  return customer;
+}
+
+  async findAll() {
+  return this.prisma.customer.findMany({
+    where: { deletedAt: null },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      users: {
+        include: {
+          userRoles: {
+            include: {
+              role: true,
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
   async deleteCustomer(id: string) {
     try {
       const customer = await this.prisma.customer.delete({
